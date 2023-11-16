@@ -1,0 +1,161 @@
+REACT TESTE 
+src/components/Home.js:
+
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
+const Home = () => {
+  const [name, setName] = useState('');
+  const history = useHistory();
+
+  const handleNameSubmit = () => {
+    // Validar se o nome está preenchido
+    if (name.trim() !== '') {
+      // Redirecionar para a próxima tela (Dashboard)
+      history.push('/dashboard');
+    }
+  };
+
+  return (
+    <div>
+      <h1>Bem-vindo</h1>
+      <label>
+        Nome:
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <button onClick={handleNameSubmit}>Entrar</button>
+    </div>
+  );
+};
+
+export default Home;
+
+src/components/Dashboard.js:
+
+import React from 'react';
+
+const Dashboard = () => {
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <p>Bem-vindo à sua dashboard!</p>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+src/App.js:
+
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home from './components/Home';
+import Dashboard from './components/Dashboard';
+
+const App = () => {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/dashboard" component={Dashboard} />
+      </Switch>
+    </Router>
+  );
+};
+
+export default App;
+
+ChatApp.js
+import React, { useState } from 'react';
+import ChatBox from './ChatBox';
+import MessageInput from './MessageInput';
+
+const ChatApp = () => {
+  const [messages, setMessages] = useState([
+    { user: 'Neymar', content: 'Fala chico' },
+    { user: 'Neymar', content: 'Meu parceiro monstro' },
+  ]);
+
+  const addMessage = (user, content) => {
+    setMessages([...messages, { user, content }]);
+  };
+
+  return (
+    <div id="chat-page">
+      <header>
+        <h1>CHATo</h1>
+      </header>
+      <ChatBox messages={messages} />
+      <MessageInput addMessage={addMessage} />
+    </div>
+  );
+};
+
+export default ChatApp;
+
+ChatBox.js
+import React from 'react';
+
+const ChatBox = ({ messages }) => {
+  return (
+    <div id="chat">
+      {messages.map((message, index) => (
+        <div key={index} className={message.user === 'Neymar' ? 'attendant' : 'user-message'}>
+          <p className="msg-at">
+            <strong>{message.user}</strong>
+          </p>
+          <p className="msg-chat">{message.content}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default ChatBox;
+
+MessageInput.js
+import React, { useState } from 'react';
+
+const MessageInput = ({ addMessage }) => {
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (message.trim() !== '') {
+      addMessage('Você', message);
+      setMessage('');
+    }
+  };
+
+  return (
+    <form id="send-message" onSubmit={handleSubmit}>
+      <input
+        autoComplete="off"
+        id="send"
+        name="send"
+        type="text"
+        placeholder="Digite sua mensagem..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+      <button id="btEnvia" name="btEnvia" type="submit">
+        ENVIAR
+      </button>
+    </form>
+  );
+};
+
+export default MessageInput;
+
+index.js
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ChatApp from './ChatApp';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <ChatApp />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
